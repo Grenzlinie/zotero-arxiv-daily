@@ -1,9 +1,9 @@
-name: Test
+name: Preview Zotero papers
 on:
   workflow_dispatch:
 
 jobs:
-  calculate-and-send:
+  calculate-and-export:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,15 +20,17 @@ jobs:
         env:
           ZOTERO_ID: ${{ secrets.ZOTERO_ID }}
           ZOTERO_KEY: ${{ secrets.ZOTERO_KEY }}
-          SENDER: ${{ secrets.SENDER }}
-          RECEIVER: ${{ secrets.RECEIVER }}
-          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
           CUSTOM_CONFIG: ${{ vars.CUSTOM_CONFIG }}
+          AI4S_PAPER_EXPORT: ${{ runner.temp }}/papers/papers.json
         run: |
           export DEBUG=true
-          printf "%b\n" "$CUSTOM_CONFIG" > config/custom.yaml
-          echo "Use custom config: "
-          cat config/custom.yaml
-          uv run src/zotero_arxiv_daily/main.py
+          uv run python site/prepare_config.py
+          uv run python site/export_daily.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai4s-preview-papers
+          path: ${{ runner.temp }}/papers/papers.json
+          if-no-files-found: error

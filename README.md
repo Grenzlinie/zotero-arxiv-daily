@@ -1,3 +1,5 @@
+> **本 fork 现在运行 [AI4S Hot 科研进展阅读站](https://Grenzlinie.github.io/zotero-arxiv-daily/)**。每日与手动预览 workflow 已改为导出论文，不发送邮件。网站来源、归档、配置和部署说明见 [site/README.md](site/README.md)。下文保留上游项目说明，邮件用法不适用于本 fork 当前工作流。
+
 <p align="center">
   <a href="" rel="noopener">
  <img width=200px height=200px src="assets/logo.svg" alt="logo"></a>
